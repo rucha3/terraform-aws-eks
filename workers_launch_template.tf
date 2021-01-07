@@ -291,7 +291,7 @@ resource "aws_launch_template" "workers_launch_template" {
       var.worker_groups_launch_template[count.index],
       "elastic_inference_accelerator",
       local.workers_group_defaults["elastic_inference_accelerator"]
-    ) != null ? [lookup(var.worker_groups_launch_template[count.index], "elastic_inference_accelerator", local.workers_group_defaults["elastic_inference_accelerator"])] : []
+    ) != null ? list(lookup(var.worker_groups_launch_template[count.index], "elastic_inference_accelerator", local.workers_group_defaults["elastic_inference_accelerator"])) : []
     content {
         type = elastic_inference_accelerator.value
     }
