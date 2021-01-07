@@ -286,6 +286,17 @@ resource "aws_launch_template" "workers_launch_template" {
     )
   )
 
+  dynamic "elastic_inference_accelerator" {
+    for_each = lookup(
+      var.worker_groups_launch_template[count.index],
+      "elastic_inference_accelerator",
+      local.workers_group_defaults["elastic_inference_accelerator"]
+    ) != null ? [lookup(var.worker_groups_launch_template[count.index], "elastic_inference_accelerator", local.workers_group_defaults["elastic_inference_accelerator"])] : []
+    content {
+        type = elastic_inference_accelerator.value
+    }
+  }
+
   credit_specification {
     cpu_credits = lookup(
       var.worker_groups_launch_template[count.index],
